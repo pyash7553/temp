@@ -1,0 +1,137 @@
+package Temp;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Scanner;
+
+class TreeNode {
+    int val;
+    TreeNode left, right;
+ 
+    public TreeNode(int item)
+    {
+        val = item;
+        left = right = null;
+    }
+}
+ 
+class Pair {
+  int a;
+  int b;
+  Pair left;
+  Pair right;
+  Pair(int aa,int bb){
+	  a=aa;
+	  b=bb;
+	  left=null;
+	  right=null;
+  }
+}
+
+class Node1{
+	int v;
+	int w;
+	Node1(int a,int b){
+		v=a;
+		w=b;
+	}
+	Node1(){
+		
+	}
+	@Override
+	public String toString() {
+		return "Node1 [v=" + v + ", w=" + w + "]";
+	}
+	
+}
+
+
+public class Exp {
+	
+	public static void makeAdj(List<List<Node1>> adj, int[] a, int[]b, int[]c) {
+		for(int i=0;i<a.length;i++) {
+			adj.add(new ArrayList<Node1>());
+		}
+		for(int i=0;i<a.length;i++) {
+			adj.get(a[i]).add(new Node1(b[i],c[i]));
+			adj.get(b[i]).add(new Node1(a[i],c[i]));
+		}
+	}
+	
+	public static void sd(int s,List<List<Node1>> adj,int N) {
+		int dist[]=new int[N];
+		for(int i=0;i<N;i++) {
+			dist[i]=1000000000;
+		}
+		dist[s]=0;
+		
+		PriorityQueue<Node1> pq=new PriorityQueue<>((aa,bb)->aa.w-bb.w);
+		pq.add(new Node1(s,0));
+		
+		while(!pq.isEmpty()) {
+			Node1 node=pq.poll();
+			
+			for(Node1 it:adj.get(node.v)) {
+				 if(dist[node.v] + it.w < dist[it.v]) {
+	                    dist[it.v] = dist[node.v] + it.w; 
+	                    pq.add(new Node1(it.v, dist[it.v]));
+	             }
+			}
+		}
+		for (int i = 0; i < N; i++)
+        {
+            System.out.print( dist[i] + " ");
+        }
+		System.out.println();
+	}
+	
+	public static void f(List<List<Node1>> adj) {
+		//System.out.println(adj.size());
+		int a[][]=new int[adj.size()][adj.size()];
+		
+		for(int i=0;i<adj.size()-1;i++) {
+			List<Node1> t=adj.get(i);
+			for(Node1 it:t) {
+				a[i][it.v]=it.w;
+				a[it.v][i]=it.w;
+			}
+		}
+		for(int i=1;i<a.length;i++) {
+			for(int j=1;j<a[0].length;j++) {
+				System.out.print(a[i][j]+" ");
+			}
+			System.out.println();
+		}
+	}
+	
+	
+	public static void main(String[] args) {
+	
+		int a[]= {1,2,1,4,2,3};
+		int b[]= {2,5,4,3,3,5};
+		int w[]= {2,5,1,3,4,1};
+		
+		List<List<Node1>> adj=new ArrayList<>();
+		
+		makeAdj(adj,a,b,w);
+		
+		//sd(1,adj,adj.size());
+		
+		f(adj);
+		
+		for(int i=0;i<adj.size();i++) {
+			//System.out.println(adj.get(i));
+		}
+		
+		
+		
+		
+	}
+	
+	
+}
+
